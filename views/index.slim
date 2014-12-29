@@ -1,0 +1,179 @@
+.col-lg-8
+  h1
+    b これはなんですか？
+
+  p
+    | ikachan互換のAPIでHipChatにメッセージをPOSTするプロキシサーバです。
+  p
+    | すでに各所からikachan経由でメッセージがPOSTされている場合でも、対応表を参照してメッセージをHipChatに中継します。
+
+  h2
+    b 挙動
+
+  p
+    | channelパラメータにルーム名をセットしてPOSTすると、指定したルームにメッセージがPOSTされます。
+
+  p
+    | channelパラメータにセットした名前が対応表のchannelにあれば、対応するroomにメッセージがPOSTされます。
+
+  - if @mappings && !@mappings.empty?
+    - channel, rooms = [@mappings.keys.last, @mappings.values.last]
+    p
+      | 例えば、channelパラメータに&nbsp;
+      code #{channel}
+      | &nbsp;をセットしてPOSTした場合、HipChatの
+      | &nbsp;<code>#{{rooms.join('</code>,&nbsp;<code>')}}</code>&nbsp;
+      | にメッセージがPOSTされます。
+
+  p
+    | channelパラメータにセットした名前が対応表のchannelにもなく、ルームも存在しない場合はメッセージが破棄されます。
+
+  h2
+    b APIの使い方
+
+  h4
+    b
+      | /notice と /privmsg の違い
+  p
+    | メッセージが通知されたときにルーム一覧のルーム名が赤くなるのが /privmsg で、ならないのが /notice です。
+  p
+    | それ以外の差はありません。
+  p
+    | ただし、MacクライアントとiOSクライアント以外ではどちらも赤くなります。
+
+  h3
+    b noticeを送る
+  blockquote
+    table.table
+      tr
+        th width="15%" メソッド
+        td POST
+      tr
+        th パス
+        td
+          | /notice
+    h4
+      b パラメータ
+      small
+        | 挙動は
+        a href="https://www.hipchat.com/docs/api/method/rooms/message" ココ
+        | を参照
+    form method="post" action="/notice"
+      table.table
+        tr
+          th channel
+          td
+            | (required)
+          td
+            .form-group
+              input.form-control type="text" name="channel" placeholder="channel or room"
+        tr
+          th message
+          td
+            | (required)
+          td
+            .form-group
+              input.form-control type="text" name="message" placeholder="your message"
+        tr
+          th color
+          td
+            | (optional, default: yellow)
+          td
+            .form-group
+              select.form-control name="color"
+                option yellow
+                option red
+                option green
+                option purple
+                option gray
+                option random
+        tr
+          th message_format
+          td
+            | (optional, default: text)
+          td
+            .form-group
+              select.form-control name="message_format"
+                option text
+                option html
+        tr
+          th
+          td
+          td
+            .form-group
+              input.form-control type="submit" value="投稿テスト"
+
+  h3
+    b privmsgを送る
+  blockquote
+    table.table
+      tr
+        th width="15%" メソッド
+        td POST
+      tr
+        th パス
+        td
+          | /privmsg
+    h4
+      b パラメータ
+      small
+        | 挙動は
+        a href="https://www.hipchat.com/docs/api/method/rooms/message" ココ
+        | を参照
+    form method="post" action="/privmsg"
+      table.table
+        tr
+          th channel
+          td
+            | (required)
+          td
+            .form-group
+              input.form-control type="text" name="channel" placeholder="channel or room"
+        tr
+          th message
+          td
+            | (required)
+          td
+            .form-group
+              input.form-control type="text" name="message" placeholder="your message"
+        tr
+          th color
+          td
+            | (optional, default: yellow)
+          td
+            .form-group
+              select.form-control name="color"
+                option yellow
+                option red
+                option green
+                option purple
+                option gray
+                option random
+        tr
+          th message_format
+          td
+            | (optional, default: text)
+          td
+            .form-group
+              select.form-control name="message_format"
+                option text
+                option html
+        tr
+          th
+          td
+          td
+            .form-group
+              input.form-control type="submit" value="投稿テスト"
+
+.col-lg-4
+  .well
+    h3 対応表
+    table.table
+      tr
+        th width="50%" channel
+        th width="50%" room
+      - @mappings.each do |channel, rooms|
+        - rooms.each do |room|
+          tr
+            td #{channel}
+            td #{room}

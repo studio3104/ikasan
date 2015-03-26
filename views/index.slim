@@ -165,6 +165,54 @@
             .form-group
               input.form-control type="submit" value="投稿テスト"
 
+  h2
+    b API を使うコードの例
+  h3 Perl
+  pre
+    code
+      |
+        #!/usr/bin/env perl
+        use strict;
+        use warnings;
+        use LWP::UserAgent;
+
+        sub ikasan {
+            my ($channel, $message, $color, $message_format) = @_;
+
+            my $ua = LWP::UserAgent->new();
+            $ua->post("#{request.url}notice", [
+                'channel' => $channel,
+                'message' => $message,
+                'color' => $color,
+                'message_format' => $message_format,
+            ]);
+        }
+
+        ikasan($channel, $message, $color, $message_format);
+
+  h3 Ruby
+  pre
+    code
+      |
+        #!/usr/bin/env ruby
+        require 'uri'
+        require 'net/http'
+
+        def ikasan(channel, message, color = nil, message_format = nil)
+          uri = URI.parse('#{request.url}notice')
+          request = Net::HTTP::Post.new(uri.path)
+          request.set_form_data(
+            channel: channel,
+            message: message,
+            color: color,
+            message_format: message_format
+          )
+          Net::HTTP.new(uri.host, uri.port).start { |http| http.request(request) }
+        end
+
+        ikasan(channel, message, color, message_format)
+
+
 .col-lg-4
   .well
     h3 対応表

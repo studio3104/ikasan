@@ -223,6 +223,26 @@
 
         ikasan(channel, message, color, message_format)
 
+  h3 Python
+  pre
+    code
+      |
+        #!/usr/bin/env python
+        # encoding: utf-8
+
+        import requests
+
+        def ikasan(channel, message, color, message_format):
+            data = {}
+            data["channel"] = channel
+            data["message"] = message
+            data["color"] = color
+            data["message_format"] = message_format
+
+            requests.post("#{request.url}notice", data)
+
+        ikasan(channel, message, color, message_format)
+
 
 .col-lg-4
   .well

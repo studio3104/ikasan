@@ -166,7 +166,18 @@
               input.form-control type="submit" value="投稿テスト"
 
   h2
-    b API を使うコードの例
+    b API を使うコードなどの例
+  h3 cURL
+  pre
+    code
+      |
+        curl \
+          -F "channel=channel" \
+          -F "message=message" \
+          -F "color=color" \
+          -F "message_format=message_format" \
+          #{request.url}notice
+
   h3 Perl
   pre
     code

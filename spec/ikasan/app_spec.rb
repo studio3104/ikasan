@@ -34,6 +34,7 @@ describe 'Ikasan App' do
 
     it 'specify all of valid request parameters' do
       post '/notice', {
+        nickname: 'moznion',
         channel: 'channel',
         message: 'message',
         color: valid_colors.sample,
@@ -93,6 +94,7 @@ describe 'Ikasan App' do
 
     it 'specify all of valid request parameters' do
       post '/privmsg', {
+        nickname: 'moznion',
         channel: 'channel',
         message: 'message',
         color: valid_colors.sample,

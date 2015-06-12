@@ -1,7 +1,8 @@
 # テストで参照されるので編集注意
 
 [hipchat]
-nick = "ikasan"
+default_nickname = "ikasan"
+nickname = "く{% nickname %}コ:彡"
 api_tokens = [ "token1", "token2", "token3" ] 
 server_url = "https://www.hipchat.com"
 

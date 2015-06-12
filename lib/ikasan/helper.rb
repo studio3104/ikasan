@@ -6,9 +6,14 @@ require 'ikasan/mapping'
 
 module Ikasan
   module Helper
+    VALID_NICKNAME_PATTERN = /[a-zA-Z0-9\s]+/
     def validate(params)
       Focuslight::Validator.validate(
         params,
+        nickname: {
+          default: conf[:hipchat][:default_nickname],
+          rule: rule(:not_blank),
+        },
         channel: {
           rule: rule(:not_blank),
         },

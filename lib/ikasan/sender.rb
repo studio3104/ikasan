@@ -56,7 +56,7 @@ module Ikasan
     # notifyがtrueだとメッセージがポストされたらチャンネル一覧のチャンネル名の色が変わる
     def post_message(q)
       hipchat[q[:room]].send(
-        conf[:hipchat][:nick],
+        conf[:hipchat][:nickname].sub('{% nickname %}', q[:nickname]),
         q[:message],
         color: q[:color],
         message_format: q[:message_format],

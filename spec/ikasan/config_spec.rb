@@ -42,8 +42,11 @@ describe 'Config' do
   end
 
   describe 'hipchat' do
-    it 'nick' do
-      expect(conf[:hipchat][:nick]).to be_a String
+    it 'default_nickname' do
+      expect(conf[:hipchat][:default_nickname]).to be_a String
+    end
+    it 'nickname' do
+      expect(conf[:hipchat][:nickname]).to be_a String
     end
     it 'api_tokens' do
       expect(conf[:hipchat][:api_tokens]).to be_a Array

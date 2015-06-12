@@ -31,7 +31,9 @@ module Ikasan
     end
 
     def room_mapping_of
-      @@room_mapping_of ||= Mapping.new(settings.root + '/config/mapping.tsv', logger)
+      file_path = settings.root + '/config/mapping.tsv'
+      file = File.exist?(file_path) ? file_path : settings.root + '/config/mapping.sample.tsv'
+      @@room_mapping_of ||= Mapping.new(file, logger)
     end
 
     # チャンネルに対応するルームが登録されていれば、HipChatのそのルームに対して通知を行う

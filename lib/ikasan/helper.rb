@@ -6,7 +6,6 @@ require 'ikasan/mapping'
 
 module Ikasan
   module Helper
-    VALID_NICKNAME_PATTERN = /[a-zA-Z0-9\s]+/
     def validate(params)
       Focuslight::Validator.validate(
         params,

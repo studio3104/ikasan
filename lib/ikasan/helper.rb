@@ -58,6 +58,7 @@ module Ikasan
             color: color,
             message_format: message_format,
             notify: params[:notify],
+            nickname: params[:nickname],
           )
         rescue
           fails << room

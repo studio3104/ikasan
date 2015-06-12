@@ -79,7 +79,9 @@ module Ikasan
     end
 
     def conf
-      @@config ||= Config.new(settings.root + '/config/config.toml')
+      file_path = settings.root + '/config/config.toml'
+      file = File.exist?(file_path) ? file_path : settings.root + '/config/config.sample.toml'
+      @@config ||= Config.new(file)
     end
 
     def sender

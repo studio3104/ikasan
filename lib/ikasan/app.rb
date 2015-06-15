@@ -28,12 +28,12 @@ module Ikasan
       slim :index
     end
 
-    post '/join' do
-    end
+    get '/join' do 405 end
+    post '/join' do 204 end
+    get '/leave' do 405 end
+    post '/leave' do 204 end
 
-    post '/leave' do
-    end
-
+    get '/notice' do 405 end
     post '/notice' do
       req_params = validate(params.merge(notify: '0'))
 
@@ -45,6 +45,7 @@ module Ikasan
       json result
     end
 
+    get '/privmsg' do 405 end
     post '/privmsg' do
       req_params = validate(params.merge(notify: '1'))
 

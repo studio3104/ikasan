@@ -14,6 +14,13 @@ describe 'Ikasan App' do
     end
   end
 
+  describe 'GET /notice' do
+    it 'get method not allowed' do
+      get '/notice'
+      expect(last_response.status).to eq 405
+    end
+  end
+
   describe 'POST /notice' do
     it 'specify only required' do
       post '/notice', {
@@ -74,6 +81,13 @@ describe 'Ikasan App' do
     end
   end
 
+  describe 'GET /privmsg' do
+    it 'get method not allowed' do
+      get '/privmsg'
+      expect(last_response.status).to eq 405
+    end
+  end
+
   describe 'POST /privmsg' do
     it 'specify only required' do
       post '/privmsg', {
@@ -131,6 +145,34 @@ describe 'Ikasan App' do
       }
       expect(last_response).to_not be_ok
       expect(last_response.body).to eq('["message: invalid length range"]')
+    end
+  end
+
+  describe 'POST /leave' do
+    it 'no content' do
+      post '/leave'
+      expect(last_response.status).to eq 204
+    end
+  end
+
+  describe 'GET /leave' do
+    it 'get method not allowed' do
+      get '/leave'
+      expect(last_response.status).to eq 405
+    end
+  end
+
+  describe 'POST /join' do
+    it 'no content' do
+      post '/join'
+      expect(last_response.status).to eq 204
+    end
+  end
+
+  describe 'GET /join' do
+    it 'get method not allowed' do
+      get '/join'
+      expect(last_response.status).to eq 405
     end
   end
 end

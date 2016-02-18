@@ -4,6 +4,8 @@ require 'ikasan/sender'
 require 'ikasan/config'
 require 'ikasan/mapping'
 
+NICKNAME_VALID_PATTERN = /[^@<>]+/
+
 module Ikasan
   module Helper
     def validate(params)
@@ -11,7 +13,7 @@ module Ikasan
         params,
         nickname: {
           default: conf[:hipchat][:default_nickname],
-          rule: rule(:not_blank),
+          rule: rule(:lambda, ->(m) { m && m.match(NICKNAME_VALID_PATTERN) }, %q['@', '<' and '>' aren't supported], :strip),
         },
         channel: {
           rule: rule(:not_blank),

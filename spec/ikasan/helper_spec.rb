@@ -85,6 +85,21 @@ describe 'Helper' do
       expect(result.has_error?).to be_a TrueClass
       expect(result.errors).to eq({ message: 'message: invalid length range' })
     end
+
+    it 'specify invalid nickname' do
+      ['@', '<', '>'].each do |nickname|
+        result = validate(
+          nickname: nickname,
+          channel: 'channel',
+          message: 'message',
+          color: valid_colors.sample,
+          message_format: valid_message_formats.sample,
+          notify: '0',
+        )
+        expect(result.has_error?).to be_a TrueClass
+        expect(result.errors).to eq({ nickname: %q[nickname: '@', '<' and '>' aren't supported] })
+      end
+    end
   end
 
   describe 'enqueue' do

@@ -13,7 +13,15 @@ module Ikasan
         params,
         nickname: {
           default: conf[:hipchat][:default_nickname],
-          rule: rule(:lambda, ->(m) { m && !m.match(NICKNAME_INVALID_PATTERN) }, %q['@', '<' and '>' aren't supported], :strip),
+          rule: rule(
+            :lambda,
+            ->(m) { m && !m.match(NICKNAME_INVALID_PATTERN) },
+            %q['@', '<' and '>' aren't supported],
+            ->(v) {
+              v = conf[:hipchat][:default_nickname] if v.strip.empty?
+              v.strip
+            }
+          ),
         },
         channel: {
           rule: rule(:not_blank),

@@ -87,7 +87,7 @@ describe 'Helper' do
     end
 
     it 'specify invalid nickname' do
-      ['@', '<', '>'].each do |nickname|
+      ['@moznion', '<studio3104', 'fuba>', 'h@ge'].each do |nickname|  # invalid characters: '@', '<', '>'
         result = validate(
           nickname: nickname,
           channel: 'channel',

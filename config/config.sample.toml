@@ -6,5 +6,9 @@ nickname = "く{% nickname %}コ:彡"
 api_tokens = [ "token1", "token2", "token3" ] 
 server_url = "https://www.hipchat.com"
 
+[hipchat.restrict]
+message_count = 20
+duration = 20  # sec
+
 [admin]
 imkayac = [ "studio3104" ]

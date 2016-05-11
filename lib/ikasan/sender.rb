@@ -2,6 +2,7 @@ require 'thread'
 require 'hipchat'
 require 'im-kayac'
 require 'ikasan/queue'
+require 'ikasan/restrictor'
 
 module Ikasan
   class Sender
@@ -9,6 +10,7 @@ module Ikasan
       @config = config
       @logger = logger
       @queue = Queue.new
+      @restrictor = Restrictor.new(config[:hipchat][:restrict][:message_count], config[:hipchat][:restrict][:duration])
       @thread = Thread.new(&method(:dequeue))
     end
 
@@ -21,12 +23,22 @@ module Ikasan
     def dequeue
       all_tokens = conf[:hipchat][:api_tokens].clone
       loop do
+        @queue.defrost!
         next if @queue.empty?
 
         bad_tokens = []
         @queue.retrieve.each do |q|
           begin
-            post_message(q)
+            if @restrictor.sendable?(q[:room])
+              post_message(q)
+            else
+              duration = conf[:hipchat][:restrict][:duration]
+              if !@queue.frozen_rooms.include?(q[:room])
+                message_count = conf[:hipchat][:restrict][:message_count]
+                log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}
+              end
+              @queue.freeze(q, duration)
+            end
           rescue HipChat::UnknownResponseCode, HipChat::Unauthorized => e
             log.warn('api token') { "#{api_token} is dead" }
             bad_tokens << api_token
@@ -62,6 +74,7 @@ module Ikasan
         message_format: q[:message_format],
         notify: q[:notify],
       )
+      @restrictor.increase_sent_count(q[:room])
       log.info('message') { "#{q[:notify] ? 'privmsg' : 'notice'} - #{q.to_json}" }
     end
 

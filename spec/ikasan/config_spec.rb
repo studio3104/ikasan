@@ -56,6 +56,15 @@ describe 'Config' do
     end
   end
 
+  describe 'hipchat.restrict' do
+    it 'message_count' do
+      expect(conf[:hipchat][:restrict][:message_count]).to be_a Integer
+    end
+    it 'duration' do
+      expect(conf[:hipchat][:restrict][:duration]).to be_a Integer
+    end
+  end
+
   describe 'admin' do
     it 'imkayac' do
       expect(conf[:admin][:imkayac]).to be_a Array

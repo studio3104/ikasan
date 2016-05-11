@@ -9,6 +9,7 @@ module Ikasan
       @config = config
       @logger = logger
       @queue = Queue.new
+      @restrictor = Restrictor.new(config[:hipchat][:restrict][:message_count], config[:hipchat][:restrict][:duration])
       @thread = Thread.new(&method(:dequeue))
     end
 
@@ -55,14 +56,18 @@ module Ikasan
 
     # notifyがtrueだとメッセージがポストされたらチャンネル一覧のチャンネル名の色が変わる
     def post_message(q)
-      hipchat[q[:room]].send(
-        conf[:hipchat][:nickname].sub('{% nickname %}', q[:nickname]),
-        q[:message],
-        color: q[:color],
-        message_format: q[:message_format],
-        notify: q[:notify],
-      )
-      log.info('message') { "#{q[:notify] ? 'privmsg' : 'notice'} - #{q.to_json}" }
+      if !@restrictor.sendable?(q[:room])
+      else
+        hipchat[q[:room]].send(
+          conf[:hipchat][:nickname].sub('{% nickname %}', q[:nickname]),
+          q[:message],
+          color: q[:color],
+          message_format: q[:message_format],
+          notify: q[:notify],
+        )
+        @restrictor.increase_sent_count(q[:room])
+        log.info('message') { "#{q[:notify] ? 'privmsg' : 'notice'} - #{q.to_json}" }
+      end
     end
 
     def hipchat

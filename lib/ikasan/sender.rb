@@ -2,6 +2,7 @@ require 'thread'
 require 'hipchat'
 require 'im-kayac'
 require 'ikasan/queue'
+require 'ikasan/restrictor'
 
 module Ikasan
   class Sender

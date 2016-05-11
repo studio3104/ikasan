@@ -9,13 +9,13 @@ module Ikasan
     end
 
     def unshift(q)
-      @queues[q[:channel]] ||= []
-      @queues[q[:channel]].unshift(q)
+      @queues[q[:room]] ||= []
+      @queues[q[:room]].unshift(q)
     end
 
     def set(q)
-      @queues[q[:channel]] ||= []
-      @queues[q[:channel]] << q
+      @queues[q[:room]] ||= []
+      @queues[q[:room]] << q
     end
     alias << set
 

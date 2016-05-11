@@ -1,5 +1,4 @@
 module Ikasan
-  class ExcessMessageCount < StandardError; end
   class Restrictor
     def initialize(message_count, duration)
       @message_count = message_count

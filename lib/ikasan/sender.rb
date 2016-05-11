@@ -28,12 +28,15 @@ module Ikasan
         bad_tokens = []
         @queue.retrieve.each do |q|
           begin
-            post_message(q)
-          rescue Ikasan::ExcessMessageCount
-            @queue.unshift(q)
-            message_count = conf[:hipchat][:restrict][:message_count]
-            duration = conf[:hipchat][:restrict][:duration]
-            log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}
+            if @restrictor.sendable?(q[:room])
+              post_message(q)
+            else
+              @queue.unshift(q)
+              message_count = conf[:hipchat][:restrict][:message_count]
+              duration = conf[:hipchat][:restrict][:duration]
+              log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}
+              next
+            end
           rescue HipChat::UnknownResponseCode, HipChat::Unauthorized => e
             log.warn('api token') { "#{api_token} is dead" }
             bad_tokens << api_token
@@ -62,19 +65,15 @@ module Ikasan
 
     # notifyがtrueだとメッセージがポストされたらチャンネル一覧のチャンネル名の色が変わる
     def post_message(q)
-      if !@restrictor.sendable?(q[:room])
-        raise Ikasan::ExcessMessageCount
-      else
-        hipchat[q[:room]].send(
-          conf[:hipchat][:nickname].sub('{% nickname %}', q[:nickname]),
-          q[:message],
-          color: q[:color],
-          message_format: q[:message_format],
-          notify: q[:notify],
-        )
-        @restrictor.increase_sent_count(q[:room])
-        log.info('message') { "#{q[:notify] ? 'privmsg' : 'notice'} - #{q.to_json}" }
-      end
+      hipchat[q[:room]].send(
+        conf[:hipchat][:nickname].sub('{% nickname %}', q[:nickname]),
+        q[:message],
+        color: q[:color],
+        message_format: q[:message_format],
+        notify: q[:notify],
+      )
+      @restrictor.increase_sent_count(q[:room])
+      log.info('message') { "#{q[:notify] ? 'privmsg' : 'notice'} - #{q.to_json}" }
     end
 
     def hipchat

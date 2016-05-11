@@ -30,7 +30,7 @@ module Ikasan
           begin
             post_message(q)
           rescue Ikasan::ExcessMessageCount
-            @queue.push(q)
+            @queue.unshift(q)
             message_count = conf[:hipchat][:restrict][:message_count]
             duration = conf[:hipchat][:restrict][:duration]
             log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}

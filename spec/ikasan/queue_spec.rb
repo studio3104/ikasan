@@ -38,4 +38,22 @@ describe Ikasan::Queue do
       { room: 'moznion', message: 'fire!' },
     ])
   end
+
+  it '#freeze' do
+    queue.freeze({room: 'studio3104', message: 'freeze!'}, 3600)
+    expect(queue.retrieve).to eq([{ room: 'moznion', message: 'crazy' }])
+    expect(queue.frozen_rooms).to eq(['studio3104'])
+
+    # trying to enqueue to studio3104 room
+    queue << {room: 'studio3104', message: 'frozen?'}
+    expect(queue.retrieve).to eq([])
+  end
+
+  it '#defrost' do
+    queue.freeze({room: 'studio3104', message: 'freeze!'})
+    expect(queue.frozen_rooms).to eq(['studio3104'])
+    sleep 1
+    queue.defrost!
+    expect(queue.frozen_rooms).to eq([])
+  end
 end

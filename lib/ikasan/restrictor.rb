@@ -15,7 +15,7 @@ module Ikasan
     def sendable?(room)
       return true if @counter[room].nil? || @counter[room].empty?
       limit = Time.now.to_i - @duration
-      @counter[room] = @counter[room].partition { |t| t >= limit }
+      @counter[room], _ = @counter[room].partition { |t| t >= limit }
       @counter[room].length <= @message_count
     end
   end

@@ -5,9 +5,9 @@ describe Ikasan::Queue do
   let(:queue) { Ikasan::Queue.new }
 
   before :each do
-    queue.set(channel: 'studio3104', message: 'cool')
-    queue << { channel: 'studio3104', message: 'smart' }
-    queue << { channel: 'moznion', message: 'crazy' }
+    queue.set(room: 'studio3104', message: 'cool')
+    queue << { room: 'studio3104', message: 'smart' }
+    queue << { room: 'moznion', message: 'crazy' }
   end
 
   after :each do
@@ -24,18 +24,18 @@ describe Ikasan::Queue do
 
   it '#retrieve' do
     expect(queue.retrieve).to eq([
-      { channel: 'studio3104', message: 'cool' },
-      { channel: 'moznion', message: 'crazy' },
+      { room: 'studio3104', message: 'cool' },
+      { room: 'moznion', message: 'crazy' },
     ])
-    expect(queue.retrieve).to eq([{ channel: 'studio3104', message: 'smart' }])
+    expect(queue.retrieve).to eq([{ room: 'studio3104', message: 'smart' }])
     expect(queue.retrieve).to eq([])
   end
 
   it '#unshift' do
-    queue.unshift(channel: 'moznion', message: 'fire!')
+    queue.unshift(room: 'moznion', message: 'fire!')
     expect(queue.retrieve).to eq([
-      { channel: 'studio3104', message: 'cool' },
-      { channel: 'moznion', message: 'fire!' },
+      { room: 'studio3104', message: 'cool' },
+      { room: 'moznion', message: 'fire!' },
     ])
   end
 end

@@ -24,7 +24,10 @@ module Ikasan
       all_tokens = conf[:hipchat][:api_tokens].clone
       loop do
         @queue.defrost!
-        next if @queue.empty?
+        if @queue.empty?
+          sleep 0.1
+          next
+        end
 
         bad_tokens = []
         @queue.retrieve.each do |q|

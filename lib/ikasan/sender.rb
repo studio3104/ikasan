@@ -35,12 +35,14 @@ module Ikasan
             if @restrictor.sendable?(q[:room])
               post_message(q)
             else
-              duration = conf[:hipchat][:restrict][:duration]
-              if !@queue.frozen_rooms.include?(q[:room])
-                message_count = conf[:hipchat][:restrict][:message_count]
-                log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}
+              if conf[:hipchat][:restrict][:stack_burst_message]
+                duration = conf[:hipchat][:restrict][:duration]
+                if !@queue.frozen_rooms.include?(q[:room])
+                  message_count = conf[:hipchat][:restrict][:message_count]
+                  log.warn('limit exceeded') {%Q[sent over than #{message_count} messages during the most recent #{duration} sec to #{q[:room]} room]}
+                end
+                @queue.freeze(q, duration)
               end
-              @queue.freeze(q, duration)
             end
           rescue HipChat::UnknownResponseCode, HipChat::Unauthorized => e
             log.warn('api token') { "#{api_token} is dead" }

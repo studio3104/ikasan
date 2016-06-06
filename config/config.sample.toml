@@ -9,7 +9,7 @@ server_url = "https://www.hipchat.com"
 [hipchat.restrict]
 message_count = 20
 duration = 20  # sec
-stack_burst_message = 0
+stack_burst_message = false
 
 [admin]
 imkayac = [ "studio3104" ]

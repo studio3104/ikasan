@@ -240,25 +240,33 @@
 
         ikasan(channel, message, nickname, color, message_format)
 
-  h3 Python
+  h3 Python2
   pre
     code
       |
         #!/usr/bin/env python
-        # encoding: utf-8
+        # -*- coding: utf-8 -*-
 
-        import requests
+        import urllib
 
-        def ikasan(channel, message, nickname=None, color=None, message_formant=None):
-            requests.post("#{request.url}notice", {
+
+        def ikasan(channel, message, nickname=None, color=None, message_format=None):
+            print('Sending message to {}: {}'.format(channel, message))
+            url = '#{request.url}notice'
+            params = {
                 'channel': channel,
                 'message': message,
-                'nickname': nickname,
-                'color': color,
-                'message_format': message_format,
-            })
-
-        ikasan(channel, message, color, message_format)
+            }
+            if nickname is not None:
+                params['nickname'] = nickname
+            if color is not None:
+                params['color'] = color
+            if message_format is not None:
+                params['message_format'] = message_format
+            data = urllib.urlencode(params)
+            f = urllib.urlopen(url, data)
+            print(f.getcode())
+            print(f.read())
 
 
 .col-lg-4

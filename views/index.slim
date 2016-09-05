@@ -251,7 +251,7 @@
 
 
         def ikasan(channel, message, nickname=None, color=None, message_format=None):
-            print('Sending message to {}: {}'.format(channel, message))
+            print('Sending message to %s: %s' % (channel, message))
             url = '#{request.url}notice'
             params = {
                 'channel': channel,

@@ -42,6 +42,9 @@ module Ikasan
               end
               @queue.freeze(q, duration)
             end
+          rescue HipChat::UnknownRoom => e
+            # 存在しないルーム名の場合は単にメッセージを捨ててエラーとしない
+            log.info('message') { "Unknown room: discard - #{$!.message}" }
           rescue HipChat::UnknownResponseCode, HipChat::Unauthorized => e
             log.warn('api token') { "#{api_token} is dead" }
             bad_tokens << api_token

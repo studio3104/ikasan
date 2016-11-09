@@ -64,7 +64,7 @@ describe 'Config' do
       expect(conf[:hipchat][:restrict][:duration]).to be_a Integer
     end
     it 'stack_burst_message' do
-      expect(conf[:hipchat][:restrict][:stack_burst_message]).to be_a String
+      expect(conf[:hipchat][:restrict][:stack_burst_message]).to satisfy {|v| !!v === v }
     end
   end
 

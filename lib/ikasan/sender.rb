@@ -35,6 +35,7 @@ module Ikasan
             if @restrictor.sendable?(q[:room])
               post_message(q)
             else
+              next unless conf[:hipchat][:restrict][:stack_burst_message]
               duration = conf[:hipchat][:restrict][:duration]
               if !@queue.frozen_rooms.include?(q[:room])
                 message_count = conf[:hipchat][:restrict][:message_count]

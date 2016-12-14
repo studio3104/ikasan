@@ -63,6 +63,9 @@ describe 'Config' do
     it 'duration' do
       expect(conf[:hipchat][:restrict][:duration]).to be_a Integer
     end
+    it 'stack_burst_message' do
+      expect(conf[:hipchat][:restrict][:stack_burst_message]).to satisfy {|v| !!v === v }
+    end
   end
 
   describe 'admin' do

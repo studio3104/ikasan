@@ -86,7 +86,7 @@ module Ikasan
     end
 
     def hipchat
-      @hipchat ||= HipChat::Client.new(api_token, api_version: 'v1', server_url: conf[:hipchat][:server_url])
+      @hipchat ||= HipChat::Client.new(api_token, api_version: 'v2', server_url: conf[:hipchat][:server_url])
     end
 
     def change_api_token
